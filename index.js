@@ -8,6 +8,7 @@ const isLoggedIn = require('./middleware/isLoggedIn');
 const helmet = require('helmet');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const db = require('./models');
+const methodOverride = require('method-override');
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(require('morgan')('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(__dirname + "/public"));
 app.use(ejsLayouts);
+app.use(methodOverride('_method'));
 app.use(helmet());
 
 const sessionStore = new SequelizeStore({
@@ -48,13 +50,11 @@ app.get('/', function(req, res) {
   res.render('index');
 });
 
-app.get('/profile', isLoggedIn, function(req, res) {
-  res.render('profile', { user: req.user });
-});
-
+app.use('/profile', isLoggedIn, require('./controllers/profile'));
 app.use('/auth', require('./controllers/auth'));
 app.use('/', isLoggedIn, require('./controllers/test'));
 
-var server = app.listen(process.env.PORT || 3000);
+var server = app.listen((process.env.PORT || 3000), () => console.log('🎻 Listening 🎻'));
 
 module.exports = server;
+

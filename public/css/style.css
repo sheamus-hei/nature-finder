@@ -1,6 +1,53 @@
+body {
+    background: url(../img/forest.jpeg);
+    background-size: cover;
+    background-position: 0 69px;
+    color: white;
+}
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background: black;
+    color: white;
+    flex-wrap: wrap;
+    align-items: center;
+}
+nav li {
+    display: inline;
+    margin: 0 10px;
+    line-height: 4;
+}
+nav ul {
+    list-style: none;
+}
+header a {
+    text-decoration: none;
+    color: white;
+}
+header a:hover {
+    text-decoration: none;
+    color: yellow;
+}
+.icon {
+    height: 50px; 
+    border-radius: 25px;
+    margin: 0 10px;
+
+}
+.logo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.well {
+    background: rgba(255,255,255,0.8);
+    color: black;
+    margin: 10px auto;
+}
 .alert {
+    padding-top: 10px;
     border-radius: 10px;
-    box-shadow: .1em .1em hotpink;
     color: white
 }
 .red {
@@ -8,4 +55,9 @@
 }
 .green {
     background: green;
+}
+.profile img {
+    height: 250px;
+    width: 250px;
+    border-radius: 175px;
 }

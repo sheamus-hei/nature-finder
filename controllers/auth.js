@@ -13,7 +13,8 @@ router.post('/signup', (req, res) => {
       email: req.body.email
     }, defaults: {
       name: req.body.name,
-      password: req.body.password
+      password: req.body.password,
+      img: req.body.img
     }
   }).then(([user, created]) => {
     if (created) {

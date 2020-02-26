@@ -1,16 +1,16 @@
 {
   "development": {
-    "database": "express_auth",
+    "database": "natureapp",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "test": {
-    "database": "express_auth",
+    "database": "natureapp",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "production": {
-    "database": "express_auth",
+    "database": "natureapp",
     "host": "127.0.0.1",
     "dialect": "postgres"
   }

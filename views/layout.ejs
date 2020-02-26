@@ -3,22 +3,31 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Authentication</title>
+    <title>NatureFinder</title>
 
     <!-- Latest compiled and minified CSS & JS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="icon" href="../img/butterfly-right.jpeg" type="image/jpeg">
     <link rel="stylesheet" href="/css/style.css">
   </head>
   <body>
-    <%- JSON.stringify(currentUser); %>
+    <!-- <%- JSON.stringify(currentUser); %> -->
     <header>
-      <h1>Authentication</h1>
+      <a href="/">
+        <div class="logo">
+          <img class="icon" src="../img/butterfly-left.jpeg">
+          <h1>NatureFinder</h1>
+        </div>
+      </a>
       <nav>
         <ul>
           <li><a href="/">Home</a></li>
           <% if (currentUser) { %>
-            <li><a href="/profile">Profile</a></li>
             <li><a href="/auth/logout">Logout</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/profile">
+              <img class="icon" src="<%= currentUser.img %>" alt="profile photo">
+            </a></li>
           <% } else { %>
             <li><a href="/auth/signup">Signup</a></li>
             <li><a href="/auth/login">Login</a></li>
