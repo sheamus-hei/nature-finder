@@ -28,13 +28,14 @@ router.get("/", (req, res) => {
             let lat = places[0].lat;
             let long = places[0].long;
             let url = `https://api.gbif.org/v1/occurrence/search?decimalLongitude=${long-0.1},${long+0.1}&decimalLatitude=${lat-0.1},${lat+0.1}&kingdomKey=1`;
+            console.log(url);
             axios.get(url).then(apiResponse => {
                 // make an array of animals with each animal showing once
                 let animals = {};
                 apiResponse.data.results.forEach(result => {
                     if (!animals.hasOwnProperty(result.speciesKey)) {
                         animals[result.speciesKey] = {
-                            img: result.media[0].identifier,
+                            img: (result.media[0]? result.media[0].identifier : null),
                             species: result.species,
                             count: 1
                         }
@@ -42,7 +43,7 @@ router.get("/", (req, res) => {
                         animals[result.speciesKey].count++;
                     }  
                 })
-                console.log(animals);
+                // console.log(animals);
                 res.render('results/results', {result: places, animals});
             }).catch(err => console.log(err))
         } else {
@@ -56,7 +57,7 @@ router.get("/", (req, res) => {
 });
 
 // GET show one result
-router.get("/", (req, res) => {
+router.get("/:id", (req, res) => {
     res.send("this is one result");
 });
 

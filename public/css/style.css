@@ -1,7 +1,8 @@
 body {
     background: url(../img/forest.jpeg);
-    background-size: cover;
-    background-position: 0 69px;
+    background-size: 100vw;
+    background-position: 0;
+    background-attachment: fixed;
     color: white;
 }
 header {
@@ -93,4 +94,26 @@ header a:hover {
 }
 .species {
     font-style: italic;
+}
+.narrow {
+    float:left;
+    width: 215px;
+    height: 303px;
+    margin: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.narrow-img {
+    border-radius: 50%;
+    width: 175px;
+    height: 175px;
+    background-size: cover;
+    margin: 0 auto;
+}
+.narrow-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 }

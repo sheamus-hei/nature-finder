@@ -1,14 +1,16 @@
 <% include ../partials/searchbar %>
 
 <div class="well dark">
-    <h4>Did you mean...</h4>
+    <% if (results.length < 1) { %>
+        <h4>Sorry, no locations found</h4>
+    <% } else { %>
+        <h4>Did you mean...</h4>
+    <% } %>
 </div>
-<div class="results">
-    <% results.forEach(result => { %>
-        <div class="well narrow">
-            <a href="/results?location=<%=result.location%>">
-                <h4><%= result.location %></h4>
-            </a>
-        </div>
-    <% }) %>
-</div>
+<% results.forEach(result => { %>
+    <div class="well">
+        <a href="/results?location=<%=result.location%>">
+            <h4><%= result.location %></h4>
+        </a>
+    </div>
+<% }) %>
