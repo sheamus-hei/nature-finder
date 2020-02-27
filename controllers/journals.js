@@ -39,3 +39,5 @@ router.put("/:id", (req, res) => {
     console.log("delete journal route responding");
     res.redirect("/");
 })
+
+module.exports = router;

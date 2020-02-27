@@ -46,7 +46,8 @@ header a:hover {
     margin: 10px auto;
 }
 .alert {
-    padding-top: 10px;
+    margin-top: 10px;
+    margin-bottom: -10px;
     border-radius: 10px;
     color: white
 }
@@ -60,4 +61,36 @@ header a:hover {
     height: 250px;
     width: 250px;
     border-radius: 175px;
+}
+.searchbar {
+    display: flex;
+    flex-direction: row;
+    padding-top: 20px;
+}
+.searchbox {
+    background: rgba(255,255,255,0.85);
+    text-align: center;
+}
+.searchicon {
+    background: none;
+    border: 0;
+}
+.welcome {
+    margin-top: 10%;
+}
+.dark {
+    text-align: center;
+    background: rgba(0,0,0,0.4);
+    padding: 20px;
+    color: white;
+    border: 0;
+}
+.dark h2 {
+    font-size: 4em;
+}
+.dark h4 {
+    font-size: 2em;
+}
+.species {
+    font-style: italic;
 }

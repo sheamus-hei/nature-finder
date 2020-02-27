@@ -52,7 +52,9 @@ app.get('/', function(req, res) {
 
 app.use('/profile', isLoggedIn, require('./controllers/profile'));
 app.use('/auth', require('./controllers/auth'));
-app.use('/', isLoggedIn, require('./controllers/test'));
+// app.use('/', require('./controllers/test'));
+app.use('/results', require('./controllers/results'));
+app.use('/journals', require('./controllers/journals'));
 
 var server = app.listen((process.env.PORT || 3000), () => console.log('🎻 Listening 🎻'));
 

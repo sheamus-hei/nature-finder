@@ -21,6 +21,8 @@
     "supertest": "^4.0.2"
   },
   "dependencies": {
+    "@mapbox/mapbox-sdk": "^0.9.0",
+    "axios": "^0.19.2",
     "bcrypt": "^3.0.8",
     "connect-flash": "^0.1.1",
     "connect-session-sequelize": "^6.1.1",
@@ -30,6 +32,7 @@
     "express-ejs-layouts": "^2.5.0",
     "express-session": "^1.17.0",
     "helmet": "^3.21.2",
+    "mapbox": "^1.0.0-beta10",
     "method-override": "^3.0.0",
     "morgan": "^1.9.1",
     "nodemon": "^2.0.2",

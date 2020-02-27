@@ -1,0 +1,12 @@
+<% include ../partials/searchbar %>
+
+<div class="well dark">
+    <h4>Showing results for <%= result[0].location %></h4>
+</div>
+<% Object.keys(animals).forEach(key => { %>
+    <div class="well">
+        <img src="<%= animals[key].img %>" alt="<%= animals[key].species %>">
+        <h4 class="species"><%= animals[key].species %></h4>
+        <p><%= animals[key].count %> spotted in this area</p>
+    </div>
+<% }) %>
