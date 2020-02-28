@@ -40,9 +40,17 @@ router.get("/:id", (req, res) => {
 });
 
 // POST add new favorite to profile
-router.post("/", (req, res) => {
-    console.log("post fave route responding");
-    res.redirect("/");
+router.post("/favorites", (req, res) => {
+    db.animal.findOrCreate({
+        where: {
+            speciesKey: req.body.speciesKey
+        }, defaults: {
+            name: req.body.name
+        }
+    }).then(animal => {
+        console.log("added a favorite:", animal)
+        res.redirect("/profile");
+    }).catch(err => console.log(err));
 });
 
 // PUT edit profile
@@ -84,7 +92,7 @@ router.put("/edit", (req, res) => {
 // DELETE delete a fav
 router.delete("/:id", (req, res) => {
     console.log("delete fav route responding");
-    res.redirect("/");
+    res.redirect("/profile");
 })
 
 module.exports = router;

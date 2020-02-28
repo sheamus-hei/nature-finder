@@ -14,6 +14,11 @@ header {
     flex-wrap: wrap;
     align-items: center;
 }
+nav {
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
+}
 nav li {
     display: inline;
     margin: 0 10px;
@@ -21,6 +26,7 @@ nav li {
 }
 nav ul {
     list-style: none;
+    margin: 0;
 }
 header a {
     text-decoration: none;
@@ -32,9 +38,10 @@ header a:hover {
 }
 .icon {
     height: 50px; 
+    width: 50px;
     border-radius: 25px;
     margin: 0 10px;
-
+    display: inline-block;
 }
 .logo {
     display: flex;
@@ -58,7 +65,7 @@ header a:hover {
 .green {
     background: green;
 }
-.profile img {
+.profile-img {
     height: 250px;
     width: 250px;
     border-radius: 175px;
@@ -116,4 +123,7 @@ header a:hover {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+}
+.round-img {
+    border-radius: 50%
 }

@@ -5,6 +5,7 @@ const axios = require('axios');
 const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 const geocodingClient = mbxGeocoding({accessToken: process.env.API_KEY});
 
+
 // GET show all results
 router.get("/", (req, res) => {
     // use mapbox api to convert result into a lat and long range
@@ -27,15 +28,16 @@ router.get("/", (req, res) => {
             // query the GBIF api to show animal results
             let lat = places[0].lat;
             let long = places[0].long;
-            let url = `https://api.gbif.org/v1/occurrence/search?decimalLongitude=${long-0.1},${long+0.1}&decimalLatitude=${lat-0.1},${lat+0.1}&kingdomKey=1`;
+            let url = `https://api.gbif.org/v1/occurrence/search?decimalLongitude=${long-0.1},${long+0.1}&decimalLatitude=${lat-0.1},${lat+0.1}&kingdomKey=1&limit=50`;
             console.log(url);
             axios.get(url).then(apiResponse => {
-                // make an array of animals with each animal showing once
+                // make an object of animals with each animal showing once
                 let animals = {};
                 apiResponse.data.results.forEach(result => {
                     if (!animals.hasOwnProperty(result.speciesKey)) {
                         animals[result.speciesKey] = {
-                            img: (result.media[0]? result.media[0].identifier : null),
+                            img: ((result.media[0]&&result.media[0].type=="StillImage")
+                                    ? result.media[0].identifier : "./img/bird.jpeg"),
                             species: result.species,
                             count: 1
                         }
@@ -50,15 +52,28 @@ router.get("/", (req, res) => {
             res.render('results/locations', {results: places});
         }
     }).catch(err => console.log(err))
-
-    // query GBIF api to get results
-    // map results into an array of original animals
-    // res.send("this is the results page");
 });
 
 // GET show one result
 router.get("/:id", (req, res) => {
-    res.send("this is one result");
+    // calls the GBIF api for a species
+    axios.get(`https://api.gbif.org/v1/species/${req.params.id}`)
+    .then(apiResponse => {
+        let alreadySaved = false;
+        db.animal.count({where: { speciesKey: req.params.id}})
+        .then(count => {
+            console.log(count);
+            alreadySaved = (count > 0);
+            res.render("results/show", {
+                animal: apiResponse.data, 
+                img: req.query.img, 
+                alreadySaved
+            });
+        }).catch(err => {
+            console.log("error in checking db")
+            console.log(err)
+        });
+    }).catch(err => console.log(err));
 });
 
 module.exports = router;

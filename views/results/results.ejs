@@ -5,10 +5,12 @@
 </div>
 <% Object.keys(animals).forEach(key => { %>
     <div class="well narrow">
-        <div class="narrow-img" style="background:url(<%= animals[key].img %>); background-size:cover; background-position:center;"></div>
+        <div class="narrow-img round-img" style="background:url(<%= animals[key].img %>); background-size:cover; background-position:center;"></div>
         <!-- <img src="<%= animals[key].img %>" alt="<%= animals[key].species %>"> -->
         <div class="narrow=text">
-            <h4 class="species"><%= animals[key].species %></h4>
+            <a href="/results/<%= key %>?img=<%= animals[key].img %>">
+                <h4 class="species"><%= animals[key].species %></h4>
+            </a>
             <p><%= animals[key].count %> spotted in this area</p>
         </div>
     </div>

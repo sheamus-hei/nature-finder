@@ -21,18 +21,20 @@
       </a>
       <nav>
         <ul>
-          <li><a href="/">Home</a></li>
+          <% if (!currentUser) { %>
+              <li><a href="/auth/signup">Signup</a></li>
+              <li><a href="/auth/login">Login</a></li>
+            <% } else { %>
+              <li><a href="/auth/logout">Logout</a></li>
+              <li><a href="/profile">Profile</a></li>
+            <% } %>
+          </ul>
           <% if (currentUser) { %>
-            <li><a href="/auth/logout">Logout</a></li>
-            <li><a href="/profile">Profile</a></li>
-            <li><a href="/profile">
-              <img class="icon" src="<%= currentUser.img %>" alt="profile photo">
-            </a></li>
-          <% } else { %>
-            <li><a href="/auth/signup">Signup</a></li>
-            <li><a href="/auth/login">Login</a></li>
+            <a href="/profile">
+              <div class="icon" style="background:url(<%= currentUser.img %>);background-size:cover;background-position:center">
+              </div>
+            </a>
           <% } %>
-        </ul>
       </nav>
     </header>
     <div class="container">

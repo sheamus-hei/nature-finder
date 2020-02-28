@@ -1,6 +1,6 @@
 <% include ../partials/searchbar %>
 <div class="well profile">
-    <img src="<%= user.img %>" alt="<%= user.name %>">
+    <div class="profile-img round-img" style="background:url(<%= user.img %>); background-size:cover; background-position:center;"></div>
     <h2>Welcome, <%= user.name %></h2>
     <a href="/profile/edit">✎ Edit</a>
 </div>
