@@ -4,5 +4,15 @@
     <h2>Welcome, <%= user.name %></h2>
     <a href="/profile/edit">✎ Edit</a>
 </div>
+<% animals.forEach(animal => { %>
+    <div class="well narrow">
+        <div class="narrow-img round-img" style="background:url(<%= animal.name %>); background-size:cover; background-position:center;"></div>
+        <div class="narrow=text">
+            <a href="/results/<%= animal.speciesKey %>?img=<%= animal.name %>">
+                <h4>Species #<%= animal.speciesKey %></h4>
+            </a>
+        </div>
+    </div>
+<% }) %>
 
 

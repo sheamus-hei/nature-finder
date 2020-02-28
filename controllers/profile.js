@@ -18,8 +18,10 @@ router.get('/', isLoggedIn, function(req, res) {
         }
     }).then(user => {
         console.log(user);
-        res.render('profile/profile', { user });
-    })
+        user.getAnimals().then(animals => {
+            res.render('profile/profile', { user, animals });
+        }).catch(err => console.log(err));
+    }).catch(err => console.log(err));
 });
 
 // GET form to edit profile

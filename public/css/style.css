@@ -65,6 +65,16 @@ header a:hover {
 .green {
     background: green;
 }
+.profile {
+    width: 288px;
+    float: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    text-align: center;
+    align-content: center;
+    margin-right: 25px;
+}
 .profile-img {
     height: 250px;
     width: 250px;
