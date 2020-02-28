@@ -43,13 +43,20 @@ router.get("/:id", (req, res) => {
 router.post("/favorites", (req, res) => {
     db.animal.findOrCreate({
         where: {
-            speciesKey: req.body.speciesKey
-        }, defaults: {
+            speciesKey: req.body.speciesKey,
             name: req.body.name
         }
-    }).then(animal => {
+    }).then(([animal, created]) => {
         console.log("added a favorite:", animal)
-        res.redirect("/profile");
+        db.user.findOne({ 
+            where: {
+                id: req.user.id
+            }
+        }).then(user => {
+            user.addAnimal(animal).then(animal => {
+                res.redirect("/profile");
+            })
+        })
     }).catch(err => console.log(err));
 });
 
@@ -60,38 +67,42 @@ router.put("/edit", (req, res) => {
             email: req.user.email
         }
     }).then(user => {
-    // update fields not email
-    let name = (req.body.name? req.body.name : user.name);
-    let email = (req.body.email? req.body.email : user.email);
-    let img = (req.body.img? req.body.img : user.img);
-    let password = (req.body.password? req.body.password : user.password);
-    // handle unique email exception
-    if (user.email != email) {
+        // update fields not email
+        let name = (req.body.name? req.body.name : user.name);
+        let email = (req.body.email? req.body.email : user.email);
+        let img = (req.body.img? req.body.img : user.img);
+        let password = (req.body.password? req.body.password : user.password);
+        // handle unique email exception
+        if (user.email != email) {
+            db.user.update({
+                email: email
+            }, {
+                where: {
+                    id: user.id
+                }
+            })
+        }
         db.user.update({
-            email: email
-        }, {
+        name: name,
+        password: password,
+        img: img
+        },   {
             where: {
                 id: user.id
             }
-        })
-    }
-    db.user.update({
-       name: name,
-       password: password,
-       img: img
-    },   {
-        where: {
-            id: user.id
-        }
-    }).then(() => {
-        res.redirect("/profile")
-    })
-})
+        }).then(() => {
+            res.redirect("/profile");
+        }).catch(err => console.log(err));
+    }).catch(err => console.log(err));
 })
 
 // DELETE delete a fav
-router.delete("/:id", (req, res) => {
-    console.log("delete fav route responding");
+router.delete("/:key", (req, res) => {
+    db.usersAnimals.destroy({
+        where: {
+            userId: req.user.id
+        }
+    }).catch(err => console.log(err));
     res.redirect("/profile");
 })
 

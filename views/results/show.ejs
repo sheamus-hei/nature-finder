@@ -21,7 +21,7 @@
             <a href="/auth/login">Log in</a> to favorite an animal
         <% } else if(!alreadySaved) { %>
             <form method="POST" action="/profile/favorites">
-                <input hidden type="text" name="speciesKey" value="<%= animal.species %>">
+                <input hidden type="text" name="speciesKey" value="<%= animal.speciesKey %>">
                 <input hidden type="text" name="name" value="<%= img %>">
                 <input class="btn btn-primary" type="submit" value="Favorite this Animal">
             </form>

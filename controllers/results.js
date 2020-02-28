@@ -12,7 +12,8 @@ router.get("/", (req, res) => {
     geocodingClient.forwardGeocode({query: req.query.location})
     .send().then(response => {
         let places = response.body.features.filter(result => {
-            if(result['place_type'][0] === 'place') {
+            if(result['place_type'][0] === 'place' || result['place_type'][0] === 'poi') {
+                console.log(result)
                 return true;
             }
         }).map( city => {
@@ -24,10 +25,11 @@ router.get("/", (req, res) => {
         });
         // if there is one location, show the animal results
         // else take them to a page where they can pick from the list of locations
-        if (places.length === 1) {
+        if (places.length === 1 || req.query.index) {
+            let index = (req.query.index)? req.query.index : 0;
             // query the GBIF api to show animal results
-            let lat = places[0].lat;
-            let long = places[0].long;
+            let lat = places[index].lat;
+            let long = places[index].long;
             let url = `https://api.gbif.org/v1/occurrence/search?decimalLongitude=${long-0.1},${long+0.1}&decimalLatitude=${lat-0.1},${lat+0.1}&kingdomKey=1&limit=50`;
             console.log(url);
             axios.get(url).then(apiResponse => {
@@ -49,7 +51,8 @@ router.get("/", (req, res) => {
                 res.render('results/results', {result: places, animals});
             }).catch(err => console.log(err))
         } else {
-            res.render('results/locations', {results: places});
+            // res.send(places);
+            res.render('results/locations', {results: places, query: req.query.location});
         }
     }).catch(err => console.log(err))
 });
@@ -60,20 +63,40 @@ router.get("/:id", (req, res) => {
     axios.get(`https://api.gbif.org/v1/species/${req.params.id}`)
     .then(apiResponse => {
         let alreadySaved = false;
-        db.animal.count({where: { speciesKey: req.params.id}})
-        .then(count => {
-            console.log(count);
-            alreadySaved = (count > 0);
-            res.render("results/show", {
-                animal: apiResponse.data, 
-                img: req.query.img, 
-                alreadySaved
-            });
+        db.animal.findOne({
+            where: { 
+                speciesKey: req.params.id
+            }, include: [db.user]})
+        .then(animal => {
+            // if animal === null, then it hasn't been faved by ANYONE
+            if (animal !== null) {
+                animal.getUsers({
+                    where: {
+                        id: req.user.id
+                    }
+                }).then(users => {
+                    alreadySaved = (users.length > 0);
+                    res.render("results/show", {
+                        animal: apiResponse.data, 
+                        img: req.query.img, 
+                        alreadySaved
+                    });
+                });
+            } else {
+                res.render("results/show", {
+                    animal: apiResponse.data, 
+                    img: req.query.img, 
+                    alreadySaved
+                });
+            }
         }).catch(err => {
-            console.log("error in checking db")
-            console.log(err)
-        });
-    }).catch(err => console.log(err));
+            console.log('problem in db call');
+            console.log(err);
+        })
+    }).catch(err => {
+        console.log('problem in axios call');
+        console.log(err);
+    })
 });
 
 module.exports = router;

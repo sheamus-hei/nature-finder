@@ -7,10 +7,12 @@
         <h4>Did you mean...</h4>
     <% } %>
 </div>
-<% results.forEach(result => { %>
+<% results.forEach((result, index) => { %>
     <div class="well">
-        <a href="/results?location=<%=result.location%>">
-            <h4><%= result.location %></h4>
-        </a>
+        <form method="GET" action="/results">
+            <input type="hidden" name="location" value="<%= query %>">
+            <input type="hidden" name="index" value="<%= index %>">
+            <input type="submit" class="form-link" value="<%= result.location %>">
+        </form>
     </div>
 <% }) %>
