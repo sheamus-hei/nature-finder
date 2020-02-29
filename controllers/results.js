@@ -30,7 +30,7 @@ router.get("/", (req, res) => {
             // query the GBIF api to show animal results
             let lat = places[index].lat;
             let long = places[index].long;
-            let url = `https://api.gbif.org/v1/occurrence/search?decimalLongitude=${long-0.1},${long+0.1}&decimalLatitude=${lat-0.1},${lat+0.1}&kingdomKey=1&limit=50`;
+            let url = `https://api.gbif.org/v1/occurrence/search?decimalLongitude=${long-0.1},${(long+0.1)}&decimalLatitude=${lat-0.1},${(lat+0.1)}&kingdomKey=1&limit=50`;
             console.log(url);
             axios.get(url).then(apiResponse => {
                 // make an object of animals with each animal showing once
@@ -48,7 +48,12 @@ router.get("/", (req, res) => {
                     }  
                 })
                 // console.log(animals);
-                res.render('results/results', {result: places, animals});
+                res.render('results/results', {
+                    location: places[index].location,
+                    animals,
+                    lat,
+                    long
+                });
             }).catch(err => console.log(err))
         } else {
             // res.send(places);
@@ -62,35 +67,47 @@ router.get("/:id", (req, res) => {
     // calls the GBIF api for a species
     axios.get(`https://api.gbif.org/v1/species/${req.params.id}`)
     .then(apiResponse => {
-        let alreadySaved = false;
-        db.animal.findOne({
-            where: { 
-                speciesKey: req.params.id
-            }, include: [db.user]})
-        .then(animal => {
-            // if animal === null, then it hasn't been faved by ANYONE
-            if (animal !== null) {
-                animal.getUsers({
-                    where: {
-                        id: req.user.id
-                    }
-                }).then(users => {
-                    alreadySaved = (users.length > 0);
+        // checks occurences for that animal in that location
+        let lat = Number(req.query.lat);
+        let long = Number(req.query.long);
+        let occurenceURL =`https://api.gbif.org/v1/occurrence/search?decimalLongitude=${long-0.1},${(long+0.1)}&decimalLatitude=${lat-0.1},${(lat+0.1)}&speciesKey=${req.query.speciesKey}&limit=100`;
+        axios.get(occurenceURL).then(occurenceResponse => {
+            console.log(occurenceResponse.data.count, "of that species 🦖 were found in", req.query.location)
+            let alreadySaved = false;
+            db.animal.findOne({
+                where: { 
+                    speciesKey: req.params.id
+                }, include: [db.user]
+            }).then(animal => {
+                // check if animal has current user
+                if (animal !== null) {
+                    animal.getUsers({
+                        where: {
+                            id: req.user.id
+                        }
+                    }).then(users => {
+                        alreadySaved = (users.length > 0);
+                        res.render("results/show", {
+                            location: req.query.location,
+                            animal: apiResponse.data, 
+                            alreadySaved,
+                            img: req.query.img, 
+                        });
+                    });
+                } else {
                     res.render("results/show", {
+                        location: req.query.location,
                         animal: apiResponse.data, 
                         img: req.query.img, 
                         alreadySaved
                     });
-                });
-            } else {
-                res.render("results/show", {
-                    animal: apiResponse.data, 
-                    img: req.query.img, 
-                    alreadySaved
-                });
-            }
+                }
+            }).catch(err => {
+                console.log('problem in db call');
+                console.log(err);
+            });
         }).catch(err => {
-            console.log('problem in db call');
+            console.log('problem in axios occurences call');
             console.log(err);
         })
     }).catch(err => {

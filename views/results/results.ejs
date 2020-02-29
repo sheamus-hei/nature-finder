@@ -1,16 +1,25 @@
 <% include ../partials/searchbar %>
 
 <div class="well dark">
-    <h4>Showing results for <%= result[0].location %></h4>
+    <h4>Showing results for <%= location %></h4>
 </div>
 <% Object.keys(animals).forEach(key => { %>
     <div class="well narrow">
         <div class="narrow-img round-img" style="background:url(<%= animals[key].img %>); background-size:cover; background-position:center;"></div>
         <!-- <img src="<%= animals[key].img %>" alt="<%= animals[key].species %>"> -->
         <div class="narrow=text">
-            <a href="/results/<%= key %>?img=<%= animals[key].img %>">
+            <form method="GET" action="/results/<%= key %>">
+                <input type="hidden" name="location" value="<%= location %>">
+                <input type="hidden" name="lat" value="<%= lat %>">
+                <input type="hidden" name="long" value="<%= long %>">
+                <input type="hidden" name="species" value="<%= animals[key].species %>">
+                <input type="hidden" name="img" value="<%= animals[key].img %>">
+                <input type="hidden" name="speciesKey" value="<%= key %>">
+                <input type="submit" class="form-link" value="<%= animals[key].species %>">
+            </form>
+            <!-- <a href="/results/<%= key %>?img=<%= animals[key].img %>">
                 <h4 class="species"><%= animals[key].species %></h4>
-            </a>
+            </a> -->
             <p><%= animals[key].count %> spotted in this area</p>
         </div>
     </div>
