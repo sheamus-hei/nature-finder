@@ -1,7 +1,11 @@
 <% include ../partials/searchbar %>
+<% if (img == "./img/bird.jpeg") { %>
+    <% img = "../img/bird.jpeg"; %>
+<% } %>
 <div class="well">
     <div class="round-img profile-img" style="background:url(<%= img %>); background-size:cover; background-position:center;"></div>
-    <div>
+    <div class="info">
+        <h2 class="vernacular-name"><%= name %></h2>
         <h4><span class="species"><%= animal.species %></span>
             <% if (alreadySaved) { %>
                 ⭐️
@@ -17,13 +21,67 @@
             <li>Genus: <%=animal.genus%></li>
         </ul>
     </div>
+    <div class="tracker info">
+        <h4>Recent sightings in this area</h4>
+        <table>
+            <tr>
+                <th></th>
+                <th>Jan</th>
+                <th>Feb</th>
+                <th>Mar</th>
+                <th>Apr</th>
+                <th>May</th>
+                <th>Jun</th>
+                <th>Jul</th>
+                <th>Aug</th>
+                <th>Sep</th>
+                <th>Oct</th>
+                <th>Nov</th>
+                <th>Dec</th>
+            </tr>
+            <tr>
+                <td><%= tracker.lastYear %></td>
+                <% tracker.lastMonthTotals.forEach((count, index) => { %>
+                    <td>
+                        <%if (index == tracker.lastPeakMonth) { %>
+                            <strong><%= count %></strong>
+                        <% } else { %>
+                            <%= count %>
+                        <% } %>
+                    </td>
+                <% }) %>
+            </tr>
+            <tr>
+                <td><%= tracker.thisYear %></td>
+                <% tracker.thisMonthTotals.forEach((count, index) => { %>
+                    <td>
+                        <%if (index == tracker.thisPeakMonth) { %>
+                            <strong><%= count %></strong>
+                        <% } else if(index <= tracker.thisMonth) { %>
+                            <%= count %>
+                        <% } %>
+                    </td>
+                <% }) %>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="easter-egg">
+        <% if (animal.genus == "Corvus") { %>
+            <p>Good morrow, Neighbor! Oh, the dark bird is not my lover, nay, just a friend.</p>
+        <% } %>
+    </div>
     <div>
         <% if (!currentUser) { %>
             <a href="/auth/login">Log in</a> to favorite an animal
         <% } else if(!alreadySaved) { %>
             <form method="POST" action="/profile/favorites">
-                <input hidden type="text" name="speciesKey" value="<%= animal.speciesKey %>">
-                <input hidden type="text" name="name" value="<%= img %>">
+                <input type="hidden" name="speciesKey" value="<%= animal.speciesKey %>">
+                <input type="hidden" name="location" value="<%= location %>">
+                <input type="hidden" name="name" value="<%= (name? name : animal.species) %>">
+                <input type="hidden" name="lat" value="<%= lat %>">
+                <input type="hidden" name="long" value="<%= long %>">
+                <input type="hidden" name="img" value="<%= img %>">
                 <input class="btn btn-primary" type="submit" value="Favorite this Animal">
             </form>
         <% } else { %>

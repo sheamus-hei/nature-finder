@@ -17,7 +17,6 @@ router.get('/', isLoggedIn, function(req, res) {
             email: req.user.email
         }
     }).then(user => {
-        console.log(user);
         user.getAnimals().then(animals => {
             res.render('profile/profile', { user, animals });
         }).catch(err => console.log(err));
@@ -31,25 +30,24 @@ router.get("/edit", (req, res) => {
             email: req.user.email
         }
     }).then(user => {
-        console.log(user);
         res.render('profile/edit', { user });
     })
 })
 
-// GET a favorite
-router.get("/:id", (req, res) => {
-    res.send("this is one animal");
-});
 
 // POST add new favorite to profile
 router.post("/favorites", (req, res) => {
     db.animal.findOrCreate({
         where: {
-            speciesKey: req.body.speciesKey,
-            name: req.body.name
+            speciesKey: req.body.speciesKey
+        }, defaults: {
+            location: req.body.location,
+            name: req.body.name,
+            lat: req.body.lat,
+            long: req.body.long,
+            img: req.body.img
         }
     }).then(([animal, created]) => {
-        console.log("added a favorite:", animal)
         db.user.findOne({ 
             where: {
                 id: req.user.id
@@ -100,10 +98,18 @@ router.put("/edit", (req, res) => {
 
 // DELETE delete a fav
 router.delete("/:key", (req, res) => {
-    db.usersAnimals.destroy({
+    db.animal.findOne({
         where: {
-            userId: req.user.id
+            speciesKey: req.params.key
         }
+    }).then(animal => {
+        console.log(animal, "🏔")
+        db.usersAnimals.destroy({
+            where: {
+                userId: req.user.id,
+                animalId: animal.id
+            }
+        }).catch(err => console.log(err));
     }).catch(err => console.log(err));
     res.redirect("/profile");
 })

@@ -6,7 +6,8 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     date: DataTypes.DATE,
     content: DataTypes.TEXT,
-    img: DataTypes.STRING
+    img: DataTypes.STRING,
+    public: DataTypes.BOOLEAN
   }, {});
   journal.associate = function(models) {
     // associations can be defined here

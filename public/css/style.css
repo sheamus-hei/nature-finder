@@ -135,5 +135,8 @@ header a:hover {
     justify-content: space-evenly;
 }
 .round-img {
-    border-radius: 50%
+    border-radius: 50%;
+}
+.vernacular-name {
+    text-transform: capitalize;
 }

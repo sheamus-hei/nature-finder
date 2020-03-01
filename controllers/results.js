@@ -12,7 +12,9 @@ router.get("/", (req, res) => {
     geocodingClient.forwardGeocode({query: req.query.location})
     .send().then(response => {
         let places = response.body.features.filter(result => {
-            if(result['place_type'][0] === 'place' || result['place_type'][0] === 'poi') {
+            if(result['place_type'][0] === 'place' 
+                || result['place_type'][0] === 'poi'
+                || result['place_type'][0] === 'postcode') {
                 console.log(result)
                 return true;
             }
@@ -36,18 +38,19 @@ router.get("/", (req, res) => {
                 // make an object of animals with each animal showing once
                 let animals = {};
                 apiResponse.data.results.forEach(result => {
-                    if (!animals.hasOwnProperty(result.speciesKey)) {
-                        animals[result.speciesKey] = {
-                            img: ((result.media[0]&&result.media[0].type=="StillImage")
-                                    ? result.media[0].identifier : "./img/bird.jpeg"),
-                            species: result.species,
-                            count: 1
-                        }
-                    } else {
-                        animals[result.speciesKey].count++;
-                    }  
+                    if(result.speciesKey) {
+                        if (!animals.hasOwnProperty(result.speciesKey)) {
+                            animals[result.speciesKey] = {
+                                img: ((result.media[0]&&result.media[0].type=="StillImage")
+                                        ? result.media[0].identifier : "./img/bird.jpeg"),
+                                species: result.species,
+                                count: 1
+                            }
+                        } else {
+                            animals[result.speciesKey].count++;
+                        }  
+                    }
                 })
-                // console.log(animals);
                 res.render('results/results', {
                     location: places[index].location,
                     animals,
@@ -67,53 +70,131 @@ router.get("/:id", (req, res) => {
     // calls the GBIF api for a species
     axios.get(`https://api.gbif.org/v1/species/${req.params.id}`)
     .then(apiResponse => {
-        // checks occurences for that animal in that location
-        let lat = Number(req.query.lat);
-        let long = Number(req.query.long);
-        let occurenceURL =`https://api.gbif.org/v1/occurrence/search?decimalLongitude=${long-0.1},${(long+0.1)}&decimalLatitude=${lat-0.1},${(lat+0.1)}&speciesKey=${req.query.speciesKey}&limit=100`;
-        axios.get(occurenceURL).then(occurenceResponse => {
-            console.log(occurenceResponse.data.count, "of that species 🦖 were found in", req.query.location)
-            let alreadySaved = false;
-            db.animal.findOne({
-                where: { 
-                    speciesKey: req.params.id
-                }, include: [db.user]
-            }).then(animal => {
-                // check if animal has current user
-                if (animal !== null) {
-                    animal.getUsers({
-                        where: {
-                            id: req.user.id
+        // get the vernacular name in a separate call
+        axios.get(`https://api.gbif.org/v1/species/${req.params.id}/vernacularNames`)
+        .then(nameResponse => {
+            let vernacularName;
+            if(nameResponse.data.results[0]) {
+                // only add if english (unfortunate but otherwise the first name listed for a russian bird is in french and i hate the french)
+                nameResponse.data.results.forEach((entry, index) => {
+                    if (entry.language == "eng") {
+                        vernacularName = nameResponse.data.results[index].vernacularName;
+                    }
+                })
+            }
+            // checks occurences for that animal in that location
+            let lat = Number(req.query.lat);
+            let long = Number(req.query.long);
+            let occurenceURL =`https://api.gbif.org/v1/occurrence/search?decimalLongitude=${long-0.1},${(long+0.1)}&decimalLatitude=${lat-0.1},${(lat+0.1)}&speciesKey=${req.query.speciesKey}&limit=100`;
+            console.log(occurenceURL)
+            axios.get(occurenceURL).then(occurenceResponse => {
+                // include two other sightings
+                // let otherSightings = {
+                //     secondPhoto: null,
+                //     secondLocation: null,
+                //     thirdPhoto: null,
+                //     thirdLocation: null
+                // }
+                let count = 0;
+                // track occurences over current and past year
+                let date = new Date();
+                let year = date.getFullYear();
+                let month = date.getMonth();
+                let tracker = {
+                    thisYear: year,
+                    thisMonth: month,
+                    lastYear: year - 1,
+                    thisYearTotal: 0,
+                    lastYearTotal: 0,
+                    thisPeakMonth: 0,
+                    lastPeakMonth: 0,
+                    thisMonthTotals: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    lastMonthTotals: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                } 
+                occurenceResponse.data.results.forEach(dataset => {
+                    // update other occurences
+                    // if (count == 1) {
+                    //     otherSightings.secondLocation = dataset.verbatimLocality,
+                    //     otherSightings.secondPhoto = (dataset.media[0] && dataset.media[0] == "stillImage")?
+                    //                  dataset.media[0].identifier : "./img/bird.jpeg";
+                    // } else if (count == 2) {
+                    //     otherSightings.thirdLocation = dataset.verbatimLocality,
+                    //     otherSightings.thirdPhoto = (dataset.media[0] && dataset.media[0] == "stillImage")?
+                    //                  dataset.media[0].identifier : "./img/bird.jpeg";
+                    // }
+                    // count the year
+                    if (dataset.year == tracker.thisYear) {
+                        tracker.thisYearTotal++;
+                        tracker.thisMonthTotals[dataset.month - 1]++;
+                        if (tracker.thisMonthTotals[dataset.month - 1] > tracker.thisMonthTotals[tracker.thisPeakMonth]) {
+                            tracker.thisPeakMonth = dataset.month - 1;
                         }
-                    }).then(users => {
-                        alreadySaved = (users.length > 0);
+                    } else if (dataset.year == tracker.lastYear) {
+                        tracker.lastYearTotal++;
+                        tracker.lastMonthTotals[dataset.month - 1]++;
+                        if (tracker.lastMonthTotals[dataset.month - 1] > tracker.lastMonthTotals[tracker.lastPeakMonth]) {
+                            tracker.lastPeakMonth = dataset.month - 1;
+                        }
+                    }
+                    count++;
+                })
+                //check if animal is in favorites
+                let alreadySaved = false;
+                db.animal.findOne({
+                    where: { 
+                        speciesKey: req.params.id
+                    }, include: [db.user]
+                }).then(animal => {
+                    // check if animal has current user
+                    if (animal !== null && req.user) {
+                        animal.getUsers({
+                            where: {
+                                id: req.user.id
+                            }
+                        }).then(users => {
+                            alreadySaved = (users.length > 0);
+                            console.log("🍚", req.query.location, req.query.img, vernacularName, lat, long)
+                            res.render("results/show", {
+                                location: req.query.location,
+                                animal: apiResponse.data, 
+                                alreadySaved,
+                                img: req.query.img, 
+                                name: vernacularName,
+                                tracker,
+                                lat,
+                                long
+                                // otherSightings
+                            });
+                        });
+                    } else {
                         res.render("results/show", {
                             location: req.query.location,
                             animal: apiResponse.data, 
                             alreadySaved,
                             img: req.query.img, 
+                            name: vernacularName,
+                            tracker,
+                            lat,
+                            long
+                            // otherSightings
                         });
-                    });
-                } else {
-                    res.render("results/show", {
-                        location: req.query.location,
-                        animal: apiResponse.data, 
-                        img: req.query.img, 
-                        alreadySaved
-                    });
-                }
+                    }
+                }).catch(err => {
+                    console.log('problem in db call');
+                    console.log(err);
+                });
             }).catch(err => {
-                console.log('problem in db call');
+                console.log('problem in axios occurences call');
                 console.log(err);
             });
         }).catch(err => {
-            console.log('problem in axios occurences call');
+            console.log('problem in axios name call');
             console.log(err);
-        })
+        });
     }).catch(err => {
         console.log('problem in axios call');
         console.log(err);
-    })
+    });
 });
 
 module.exports = router;

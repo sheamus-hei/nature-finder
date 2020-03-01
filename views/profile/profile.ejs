@@ -6,11 +6,17 @@
 </div>
 <% animals.forEach(animal => { %>
     <div class="well narrow">
-        <div class="narrow-img round-img" style="background:url(<%= animal.name %>); background-size:cover; background-position:center;"></div>
+        <div class="narrow-img round-img" style="background:url(<%= animal.img %>); background-size:cover; background-position:center;"></div>
         <div class="narrow=text">
-            <a href="/results/<%= animal.speciesKey %>?img=<%= animal.name %>">
-                <h4>Species #<%= animal.speciesKey %></h4>
-            </a>
+            <form method="GET" action="/results/<%= animal.speciesKey %>">
+                <input type="hidden" name="location" value="<%= animal.location %>">
+                <input type="hidden" name="lat" value="<%= animal.lat %>">
+                <input type="hidden" name="long" value="<%= animal.long %>">
+                <input type="hidden" name="img" value="<%= animal.img %>">
+                <input type="hidden" name="speciesKey" value="<%= animal.speciesKey %>">
+                <input type="submit" class="form-link" value="<%= animal.name %>">
+            </form>
+            <p><%= animal.location %></p>
         </div>
     </div>
 <% }) %>
