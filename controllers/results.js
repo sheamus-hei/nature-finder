@@ -153,7 +153,6 @@ router.get("/:id", (req, res) => {
                             }
                         }).then(users => {
                             alreadySaved = (users.length > 0);
-                            console.log("🍚", req.query.location, req.query.img, vernacularName, lat, long)
                             res.render("results/show", {
                                 location: req.query.location,
                                 animal: apiResponse.data, 

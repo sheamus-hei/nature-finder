@@ -195,6 +195,11 @@ header a:hover {
     color: white;
     background: #3772b6;
 }
+footer {
+    margin-top: 80px;
+    color: black;
+    text-align: center;
+}
 @media screen and (max-width: 800px) {
     body {
         background: url(../img/forest-tall.jpeg);

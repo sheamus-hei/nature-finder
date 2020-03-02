@@ -21,6 +21,7 @@
       </a>
       <nav>
         <ul>
+          <li><a href="https://github.com/dean-hei/nature-finder">About</a></li>
           <% if (!currentUser) { %>
               <li><a href="/auth/signup">Sign up</a></li>
               <li><a href="/auth/login">Log in</a></li>
@@ -41,6 +42,9 @@
       <% include partials/alerts %>
       <%- body %>
     </div>
+    <footer>
+      <p>© Dean Heikkila 2020</p>
+    </footer>
 
     <script src="//code.jquery.com/jquery.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
