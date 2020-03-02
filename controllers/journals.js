@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
 
 // GET form to make new journal
 router.get("/new", (req, res) => {
-    res.send("form to make a new journal");
+    res.render("new", {user, animal: req.query.animal});
 });
 
 // GET form to edit journal

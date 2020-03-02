@@ -9,7 +9,7 @@
 </div>
 <% results.forEach((result, index) => { %>
     <div class="well">
-        <form method="GET" action="/results">
+        <form class="wrap-buttons" method="GET" action="/results">
             <input type="hidden" name="location" value="<%= query %>">
             <input type="hidden" name="index" value="<%= index %>">
             <input type="submit" class="form-link" value="<%= result.location %>">

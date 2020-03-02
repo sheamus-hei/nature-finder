@@ -4,66 +4,68 @@
 <% } %>
 <div class="well">
     <div class="round-img profile-img" style="background:url(<%= img %>); background-size:cover; background-position:center;"></div>
-    <div class="info">
+        <div class="show-info">
         <h2 class="vernacular-name"><%= name %></h2>
         <h4><span class="species"><%= animal.species %></span>
             <% if (alreadySaved) { %>
                 ⭐️
             <% } %>
         </h4>
-        <p>spotted near <%= location %></p>
-        <ul>
-            <li>Kingdom: <%=animal.kingdom%></li>
-            <li>Phylum: <%=animal.phylum%></li>
-            <li>Class: <%=animal.class%></li>
-            <li>Order: <%=animal.order%></li>
-            <li>Family: <%=animal.family%></li>
-            <li>Genus: <%=animal.genus%></li>
-        </ul>
+        <p>Spotted near 
+            <a href="/results?location=<%=location%>"><%= location %></a>
+        </p>
     </div>
+    <table class="table mine">
+        <tr><th>Kingdom</th><td><%=animal.kingdom%></td></tr>
+        <tr><th>Phylum</th><td><%=animal.phylum%></td></tr>
+        <tr><th>Class</th><td><%=animal.class%></td></tr>
+        <tr><th>Order</th><td><%=animal.order%></td></tr>
+        <tr><th>Family</th><td><%=animal.family%></td></tr>
+        <tr><th>Genus</th><td><%=animal.genus%></td></tr>
+    </table>
     <div class="tracker info">
         <h4>Recent sightings in this area</h4>
-        <table>
-            <tr>
-                <th></th>
-                <th>Jan</th>
-                <th>Feb</th>
-                <th>Mar</th>
-                <th>Apr</th>
-                <th>May</th>
-                <th>Jun</th>
-                <th>Jul</th>
-                <th>Aug</th>
-                <th>Sep</th>
-                <th>Oct</th>
-                <th>Nov</th>
-                <th>Dec</th>
-            </tr>
-            <tr>
-                <td><%= tracker.lastYear %></td>
-                <% tracker.lastMonthTotals.forEach((count, index) => { %>
-                    <td>
+        <div class="wide">
+            <table class="table table-striped">
+                <tr>
+                    <th></th>
+                    <th scope="col">Jan</th>
+                    <th scope="col">Feb</th>
+                    <th scope="col">Mar</th>
+                    <th scope="col">Apr</th>
+                    <th scope="col">May</th>
+                    <th scope="col">Jun</th>
+                    <th scope="col">Jul</th>
+                    <th scope="col">Aug</th>
+                    <th scope="col">Sep</th>
+                    <th scope="col">Oct</th>
+                    <th scope="col">Nov</th>
+                    <th scope="col">Dec</th>
+                </tr>
+                <tr>
+                    <th scope="row"><%= tracker.lastYear %></th>
+                    <% tracker.lastMonthTotals.forEach((count, index) => { %>
                         <%if (index == tracker.lastPeakMonth) { %>
-                            <strong><%= count %></strong>
+                            <td class="highlight"><strong><%= count %></strong></td>
                         <% } else { %>
-                            <%= count %>
+                            <td><%= count %></td>
                         <% } %>
-                    </td>
-                <% }) %>
-            </tr>
-            <tr>
-                <td><%= tracker.thisYear %></td>
-                <% tracker.thisMonthTotals.forEach((count, index) => { %>
-                    <td>
+                    <% }) %>
+                </tr>
+                <tr>
+                    <th scope="row"><%= tracker.thisYear %></th>
+                    <% tracker.thisMonthTotals.forEach((count, index) => { %>
                         <%if (index == tracker.thisPeakMonth) { %>
-                            <strong><%= count %></strong>
+                            <td class="highlight"><strong><%= count %></strong></td>
                         <% } else if(index <= tracker.thisMonth) { %>
-                            <%= count %>
+                            <td><%= count %></td>
+                        <% } else { %>
+                            <td></td>
                         <% } %>
-                    </td>
-                <% }) %>
-            </tr>
-        </table>
+                    <% }) %>
+                </tr>
+            </table>
+        </div>
     </div>
     
     <div class="easter-egg">

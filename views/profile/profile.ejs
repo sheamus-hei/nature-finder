@@ -4,20 +4,24 @@
     <h2>Welcome, <%= user.name %></h2>
     <a href="/profile/edit">✎ Edit</a>
 </div>
+<!-- <div class="well dark favorites-header">
+    <h4>Your Favorites</h4>
+</div> -->
 <% animals.forEach(animal => { %>
-    <div class="well narrow">
+    <div class="well narrow favorites">
+        <p>⭐️</p>
         <div class="narrow-img round-img" style="background:url(<%= animal.img %>); background-size:cover; background-position:center;"></div>
-        <div class="narrow=text">
-            <form method="GET" action="/results/<%= animal.speciesKey %>">
+        <!-- <div class="narrow=text"> -->
+            <form class="wrap-buttons" method="GET" action="/results/<%= animal.speciesKey %>">
                 <input type="hidden" name="location" value="<%= animal.location %>">
                 <input type="hidden" name="lat" value="<%= animal.lat %>">
                 <input type="hidden" name="long" value="<%= animal.long %>">
                 <input type="hidden" name="img" value="<%= animal.img %>">
                 <input type="hidden" name="speciesKey" value="<%= animal.speciesKey %>">
-                <input type="submit" class="form-link" value="<%= animal.name %>">
+                <input type="submit" class="form-link vernacular-name" value="<%= animal.name %>">
             </form>
-            <p><%= animal.location %></p>
-        </div>
+            <!-- <p><%= animal.location %></p> -->
+        <!-- </div> -->
     </div>
 <% }) %>
 

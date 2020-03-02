@@ -8,7 +8,7 @@ body {
 header {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
     background: black;
     color: white;
     flex-wrap: wrap;
@@ -36,6 +36,10 @@ header a:hover {
     text-decoration: none;
     color: yellow;
 }
+.wrap-buttons {
+    display: flex;
+    justify-content: space-around;
+}
 .icon {
     height: 50px; 
     width: 50px;
@@ -55,7 +59,7 @@ header a:hover {
 }
 .alert {
     margin-top: 10px;
-    margin-bottom: -10px;
+    margin-bottom: 0;
     border-radius: 10px;
     color: white
 }
@@ -120,7 +124,7 @@ header a:hover {
     text-align: center;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: space-around;
 }
 .narrow-img {
     border-radius: 50%;
@@ -139,4 +143,63 @@ header a:hover {
 }
 .vernacular-name {
     text-transform: capitalize;
+}
+.favorites {
+    height: 300px;
+    justify-content: space-evenly;
+}
+.favorites p {
+    text-align: right;
+    margin: 0;
+    margin-bottom: -15px;
+    font-size: 2em;
+}
+.favorites form {
+    padding-top: 10px;
+}
+.form-link {
+    font-size: 16px;
+    color: #324aa8;
+    background: none;
+    border: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.form-link:hover {
+    color: #1b1b8c;
+    text-decoration: underline;
+}
+.favorites-header {
+    width: 75%;
+    height: 75px;
+    text-align: left;
+}
+.table {
+    background: lightgray;
+    border-radius: 20px;
+    max-width: 100%;
+}
+.wide {
+    overflow-x: auto;
+}
+.show-info {
+    float: left;
+    width: 300px;
+    padding-right: 10px;
+}
+.mine {
+    width: 300px;
+}
+.highlight {
+    /* background: rgba(240,255,0,0.5); */
+    color: white;
+    background: #3772b6;
+}
+@media screen and (max-width: 800px) {
+    body {
+        background: url(../img/forest-tall.jpeg);
+        background-size: 100vw;
+        background-position: 0;
+        background-attachment: fixed;
+    }
 }

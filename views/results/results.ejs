@@ -8,7 +8,7 @@
         <div class="narrow-img round-img" style="background:url(<%= animals[key].img %>); background-size:cover; background-position:center;"></div>
         <!-- <img src="<%= animals[key].img %>" alt="<%= animals[key].species %>"> -->
         <div class="narrow=text">
-            <form method="GET" action="/results/<%= key %>">
+            <form class="wrap-buttons" method="GET" action="/results/<%= key %>">
                 <input type="hidden" name="location" value="<%= location %>">
                 <input type="hidden" name="lat" value="<%= lat %>">
                 <input type="hidden" name="long" value="<%= long %>">
