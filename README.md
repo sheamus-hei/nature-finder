@@ -58,7 +58,7 @@ The password was limited between 8 and 99 characters, name between 1 and 99 char
 * location: string
 * img: string
 
-The animals table stored the species key, which was the GBIF species key to be used to call the API for that species. The location was stored, but to make it easier to call the location in the Mapbox API, the latitude and longitude were also stored. Finally, an image of the animal was stored; if there was no image available, instead a placeholder image was used.
+The animals table stored the species key, which was the GBIF species key to be used to call the API for that species. The vernacular name was also stored, and if no name was available, the species was stored as the name. The location was stored, but to make it easier to call the location in the Mapbox API, the latitude and longitude were also stored. Finally, an image of the animal was stored; if there was no image available, instead a placeholder image was used.
 
 **Table: UsersAnimals**
 
@@ -119,7 +119,7 @@ _**DELETE**_
 
 ### Site Design
 
-The sight was designed to be familiar to visitors of US national parks, and echoes the design of their brochures/maps.
+The site was designed to be familiar to visitors of US national parks, and echoes the design of their brochures/maps.
 
 ![](wireframes/brochure.jpg)
 *Brochure for Olympic National Forest*
