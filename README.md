@@ -2,7 +2,9 @@
 
 ![](wireframes/results.png)
 
-The NatureFinder app allows users to find wildlife in their area. The user can search for a location (worldwide) and then view animals recently sighted in that area, and view information such as the peak month for animal sightings in the past year. The user can make a profile and then save animals as a favorite for future reference.
+The NatureFinder app allows users to find wildlife in their area. Users can search for a location (worldwide), and then the ap will display animals recently sighted in that area, and users can view information such as the peak month for animal sightings in the past year. Users can also make a profile and then save animals as a favorite for future reference.
+
+See it live: [http://naturefinder.herokuapp.com/](http://naturefinder.herokuapp.com/)
 
 ## 1. Project Planning
 
