@@ -1,5 +1,7 @@
 # NatureFinder
 
+by [erik-hei](https://github.com/erik-hei)
+
 ![](wireframes/results.png)
 
 The NatureFinder app allows users to find wildlife in their area. Users can search for a location (worldwide), and then the ap will display animals recently sighted in that area, and users can view information such as the peak month for animal sightings in the past year. Users can also make a profile and then save animals as a favorite for future reference.
@@ -44,28 +46,34 @@ Two tables were planned for the database: users and animals. These two tables wo
 
 **Table: Users**
 
-* email: string
-* name: string
-* password: string
-* img: string
+| Column| Type|
+|------|------|
+|Email |String|
+|Name| String|
+|Password| String|
+|Image| String|
 
 The password was limited between 8 and 99 characters, name between 1 and 99 characters, and the email could not be null. Node modules passport and bcrypt were used to encrypt the passwords and support user authentication.
 
 **Table: Animals**
 
-* speciesKey: integer
-* name: string
-* lat: numeric
-* long: numeric
-* location: string
-* img: string
+| Column| Type|
+|------|------|
+|Species Key| Integer |
+|Name| String|
+|Lat| Numeric|
+|Long| Numeric|
+|Location| String|
+|Image| String|
 
 The animals table stored the species key, which was the GBIF species key to be used to call the API for that species. The vernacular name was also stored, and if no name was available, the species was stored as the name. The location was stored, but to make it easier to call the location in the Mapbox API, the latitude and longitude were also stored. Finally, an image of the animal was stored; if there was no image available, instead a placeholder image was used.
 
 **Table: UsersAnimals**
 
-* UserID: integer (foreign key)
-* AnimalID: integer (foreign key)
+| Column| Type|
+|------|------|
+|UserID|Integer (FK)|
+|AnimalID|Integer (FK)|
 
 
 ### Routing

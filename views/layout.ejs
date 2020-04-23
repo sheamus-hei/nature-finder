@@ -21,14 +21,14 @@
       </a>
       <nav>
         <ul>
-          <li><a href="https://github.com/dean-hei/nature-finder">About</a></li>
           <% if (!currentUser) { %>
-              <li><a href="/auth/signup">Sign up</a></li>
-              <li><a href="/auth/login">Log in</a></li>
+            <li><a href="/auth/signup">Sign up</a></li>
+            <li><a href="/auth/login">Log in</a></li>
             <% } else { %>
-              <li><a href="/auth/logout">Logout</a></li>
               <li><a href="/profile">Profile</a></li>
+              <li><a href="/auth/logout">Logout</a></li>
             <% } %>
+            <li><a href="https://github.com/erik-hei/nature-finder" target="_blank">About</a></li>
           </ul>
           <% if (currentUser) { %>
             <a href="/profile">
@@ -43,7 +43,7 @@
       <%- body %>
     </div>
     <footer>
-      <p>© Dean Heikkila 2020</p>
+      <p>© Erik (dj) Heikkila 2020</p>
     </footer>
 
     <script src="//code.jquery.com/jquery.js"></script>
