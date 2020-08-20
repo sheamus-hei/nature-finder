@@ -24,7 +24,7 @@
     "@mapbox/mapbox-sdk": "^0.9.0",
     "@primer/octicons": "^9.4.0",
     "axios": "^0.19.2",
-    "bcrypt": "^3.0.8",
+    "bcrypt": "^5.0.0",
     "connect-flash": "^0.1.1",
     "connect-session-sequelize": "^6.1.1",
     "dotenv": "^8.0.0",
