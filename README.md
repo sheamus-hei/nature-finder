@@ -1,6 +1,6 @@
 # NatureFinder
 
-by [erik-hei](https://github.com/erik-hei)
+by [sheamus-hei](https://github.com/sheamus-hei)
 
 ![](wireframes/results.png)
 
